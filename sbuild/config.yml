@@ -1,0 +1,5 @@
+name: bzip2
+builder:
+  name: Bzip2Builder
+platforms:
+  - linux-glibc2.11/amd64

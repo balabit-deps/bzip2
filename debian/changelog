@@ -1,0 +1,5 @@
+bzip2 (1.0.8-1.syslogng70) syslogng70; urgency=medium
+
+  * initial release
+
+ -- Laszlo Varady <laszlo.varady@balabit.com>  Thu, 18 Jul 2019 14:40:43 +0200

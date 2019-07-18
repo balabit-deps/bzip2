@@ -1,0 +1,18 @@
+Source: bzip2
+Priority: extra
+Maintainer: syslog-ng developers <syslog-ng@lists.balabit.hu>
+Build-Depends: pkg-config
+Standards-Version: 3.7.2
+Section: libs
+
+Package: bzip2
+Architecture: any
+Description: bzip2
+
+Package: libbz2
+Architecture: any
+Description: libbz2
+
+Package: libbz2-dev
+Architecture: any
+Description: libbz2-dev
