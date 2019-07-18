@@ -1,0 +1,41 @@
+#!/usr/local/bin/make -f
+STAMPDIR=tgz2build/stamps
+BZ2_INSTALL_PREFIX=$(ZBS_STAGE_DIR)/$(ZBS_PREFIX)
+LIBBZ2_SO_NAME=$$(find $(BZ2_INSTALL_PREFIX)/lib -type f -name "libbz2.so*" -exec basename {} \; | head -n 1)
+
+all: binary
+
+binary: $(STAMPDIR)/stamp-setup $(STAMPDIR)/stamp-configure $(STAMPDIR)/stamp-build $(STAMPDIR)/stamp-install
+
+setup: $(STAMPDIR)/stamp-setup
+$(STAMPDIR)/stamp-setup:
+	mkdir tgz2build/stamps || true
+	touch $@
+
+configure: $(STAMPDIR)/stamp-configure
+$(STAMPDIR)/stamp-configure: $(STAMPDIR)/stamp-setup
+	touch $@
+
+build: $(STAMPDIR)/stamp-build
+$(STAMPDIR)/stamp-build: $(STAMPDIR)/stamp-configure
+	$(MAKE) -f Makefile-libbz2_so
+	$(MAKE) bzip2 bzip2recover
+	touch $@
+
+install: $(STAMPDIR)/stamp-install
+$(STAMPDIR)/stamp-install: $(STAMPDIR)/stamp-build
+	rm -rf $(ZBS_STAGE_DIR) || true
+	$(MAKE) install PREFIX=$(BZ2_INSTALL_PREFIX)
+	install -m755 bzip2-shared $(BZ2_INSTALL_PREFIX)/bin/bzip2
+	ln -sf bzip2 $(BZ2_INSTALL_PREFIX)/bin/bunzip2
+	ln -sf bzip2 $(BZ2_INSTALL_PREFIX)/bin/bzcat
+	cp -a libbz2.so* $(BZ2_INSTALL_PREFIX)/lib
+
+	ln -s $(LIBBZ2_SO_NAME) $(BZ2_INSTALL_PREFIX)/lib/libbz2.so
+	ln -s $(LIBBZ2_SO_NAME) $(BZ2_INSTALL_PREFIX)/lib/libbz2.so.1
+	touch $@
+
+clean:
+	rm -rf tgz2build/stamps || true
+	rm -rf tgz2build/staging || true
+	$(MAKE) clean
