@@ -1,0 +1,18 @@
+source="bzip2"
+version=1.0.8-pe-1
+
+check_rpath_skip_list=("${prefix}/lib/libbz2.so*")
+
+build() {
+  make -f Makefile-libbz2_so
+}
+
+install() {
+  command install -dm755 "${dest_dir}/${prefix}"/{include,lib}
+
+  command install -m755 bzlib.h ${dest_dir}/${prefix}/include/bzlib.h
+  cp -a libbz2.so* ${dest_dir}/${prefix}/lib/
+  LIBBZ2_SO_NAME=$(find ${dest_dir}/${prefix}/lib -type f -name "libbz2.so*" -exec basename {} \; | head -n 1)
+  ln -sf ${LIBBZ2_SO_NAME} ${dest_dir}/${prefix}/lib/libbz2.so
+  ln -sf ${LIBBZ2_SO_NAME} ${dest_dir}/${prefix}/lib/libbz2.so.1
+}

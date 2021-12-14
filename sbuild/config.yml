@@ -1,0 +1,3 @@
+name: bzip2
+builder:
+  name: Bzip2Builder
